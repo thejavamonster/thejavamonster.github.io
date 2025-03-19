@@ -1,5 +1,5 @@
-name: Merlot Theme
-baseurl: http://ZedThree.github.io/merlot-theme-jekyll
+name: thejavamonster
+baseurl: http://thejavamonster.github.io
 description: a fancy schmancy theme for github pages
 
 permalink: /:year/:month/:day/:title/
