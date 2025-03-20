@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Making pronto bots"
-date:   2013-06-05 17:06:25
+date:   2025-03-20 10:33:41
 categories: pronto python coding
 ---
 
