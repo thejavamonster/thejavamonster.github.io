@@ -1,6 +1,6 @@
 name: thejavamonster
 baseurl: https://thejavamonster.github.io
-description: a fancy schmancy theme for github pages
+description: i yap, therefore i am
 
 permalink: /:year/:month/:day/:title/
 paginate: 10
