@@ -114,6 +114,7 @@ header, footer, section {
 
 div.shell {
   display: block;
+  width: 80%;
   margin: 0 auto;
 }
 
