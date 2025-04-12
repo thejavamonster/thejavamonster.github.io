@@ -134,11 +134,11 @@ Nearly done. Run the following commands to get your bot up (remember to update t
 ```cd admin_panel
 $Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
 python manage.py migrate``` 
-python manage.py collectstatic --no-input``` 
+python manage.py collectstatic --no-input
 cd ..
 python -m ballsdex```
 
-Your bot is now up and running! Of course, there are no actual balls in here yet. Luckily, that can be done through an easy GUI. We'll need to open the admin panel. Open up a new terminal, so as to not kill your bot. First, you need to create an account that you can use to log in to the admin panel. You'll only need to do this once, though. ```cd``` to the ```admin_panel``` folder and run this command: ```poetry run python3 manage.py createsuperuser```. Follow the instructions it gives you.
+Your bot is now up and running! Of course, there are no actual balls in here yet. Luckily, that can be done through an easy GUI. We'll need to open the admin panel. Open up a new terminal, so as to not kill your bot. First, you need to create an account that you can use to log in to the admin panel. You'll only need to do this once, though. ```cd``` to the ```admin_panel``` folder and run this command: ```poetry run python manage.py createsuperuser```. Follow the instructions it gives you.
 
 
 Then run these commands (remember to update the necessary variables in the enviroment variable):
