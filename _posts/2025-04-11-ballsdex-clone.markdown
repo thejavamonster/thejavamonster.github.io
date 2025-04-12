@@ -43,7 +43,7 @@ Run ```poetry shell``` to make sure your venv is activated correctly, then run `
 
 If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```. Open that up and enter this into it (this is just the default Ballsdex config):
 
-{% highlight python %}
+{% highlight yaml %}
 # yaml-language-server: $schema=json-config-ref.json
 
 # paste the bot token after regenerating it here
@@ -182,4 +182,3 @@ cd BallsDex-DiscordBot/admin_panel
 $Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
 uvicorn admin_panel.asgi:application
 ```
-
