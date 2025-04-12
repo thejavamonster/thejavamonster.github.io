@@ -32,6 +32,13 @@ Now we're going to clone the Ballsdex repo. Create a folder, ```cd``` to it in y
 ```git clone https://github.com/laggron42/BallsDex-DiscordBot.git```
 
 Open that folder in VSCode. It should look something like this:
+
 ![image](https://github.com/user-attachments/assets/251bd387-27be-4fac-be85-fd3d0c874dc4)
 
+Set up a virtual enviroment with ```py -m venv venv```. Open up a new terminal (making sure that you're in the venv), ```cd``` into ```/BallsDex-DiscordBot``` and ```pip install poetry```. 
 
+Now, run ```poetry install``` to install all the dependencies for the bot. It might take a few minutes.
+
+Run ```poetry shell``` to make sure your venv is activated correctly, then run ```python -m ballsdex --version``` to check that everything got installed right.
+
+If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```.
