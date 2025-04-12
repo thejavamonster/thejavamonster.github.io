@@ -15,7 +15,7 @@ Also, I'm writing this all assuming that you're using VSCode, but I'd bet it's p
 
 First, you need to set up a Discord bot account. Go to the [application page](https://discord.com/developers/applications) and start a new application. Go to the "Bot" tab, scroll down, and tick "Message content intent" under "Priveleged Gateway Intents."
 
-![image](/assets/images/your-image.jpg)
+<img src="/assets/images/discordapp.png" alt="">
 
 Scroll up and click "reset token" to generate an access token for your bot. Make sure to copy and paste it somewhere, since you won't be able to see it again. Save your changes.
 
