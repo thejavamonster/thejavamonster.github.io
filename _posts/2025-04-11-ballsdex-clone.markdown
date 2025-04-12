@@ -20,6 +20,7 @@ First, you need to set up a Discord bot account. Go to the [application page](ht
 Scroll up and click "reset token" to generate an access token for your bot. Make sure to copy and paste it somewhere, since you won't be able to see it again. Save your changes.
 
 Next, you need to install [PostgreSQL](https://www.postgresql.org/download/) and set it up. It should prompt you to create a password. Once you've done all that, open up the GUI (it should be called pgAdmin4 on your computer). We're going to create a new database where all the balls will be stored. Right click on "Databases" under "Servers" in the left sidebar and create a new database.
+
 ![image](https://github.com/user-attachments/assets/ee0790bb-5dd0-439f-951f-8b93f368d9c5)
 
 
