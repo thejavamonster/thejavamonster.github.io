@@ -31,4 +31,7 @@ Now we're going to clone the Ballsdex repo. Create a folder, ```cd``` to it in y
 
 ```git clone https://github.com/laggron42/BallsDex-DiscordBot.git```
 
-You should now be able to open that folder in VSCode.
+Open that folder in VSCode. It should look something like this:
+![image](https://github.com/user-attachments/assets/251bd387-27be-4fac-be85-fd3d0c874dc4)
+
+
