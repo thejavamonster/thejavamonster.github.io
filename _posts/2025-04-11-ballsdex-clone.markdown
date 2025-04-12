@@ -132,19 +132,28 @@ The only thing you need to change here right now is the ```discord-token``` vari
 Nearly done. Run the following commands to get your bot up:
 
 ```cd admin_panel```
+
 ```$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'``` (replace all the necessary variables)
+
 ```python manage.py migrate``` to initialize the database
+
 ```python manage.py collectstatic --no-input``` to initialize the admin panel
+
 ```cd ..```
+
 ```python -m ballsdex```
 
 Your bot is now up and running! Of course, there are no actual balls in here yet. Luckily, that can be done through an easy GUI. We'll need to open the admin panel. Open up a new terminal, so as to not kill your bot. First, you need to create an account that you can use to log in to the admin panel. You'll only need to do this once, though. ```cd``` to the ```admin_panel``` folder and run this command: ```poetry run python3 manage.py createsuperuser```. Follow the instructions it gives you.
 
 
 Then run these commands:
+
 ```poetry shell```
+
 ```cd BallsDex-DiscordBot/admin_panel```
+
 ```$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name``` 
+
 ```uvicorn admin_panel.asgi:application```
 
 If all goes well, you should get this output:
