@@ -43,7 +43,7 @@ Run ```poetry shell``` to make sure your venv is activated correctly, then run `
 
 If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```. Open that up and enter this into it:
 
-{% highlight yaml %}
+{% highlight json %}
 # yaml-language-server: $schema=json-config-ref.json
 
 # paste the access token you generated earlier here
