@@ -43,7 +43,7 @@ Run ```poetry shell``` to make sure your venv is activated correctly, then run `
 
 If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```. Open that up and enter this into it (this is just the default Ballsdex config):
 
-```
+{% highlight python %}
 # yaml-language-server: $schema=json-config-ref.json
 
 # paste the bot token after regenerating it here
@@ -125,7 +125,7 @@ owners:
 
   # a list of IDs that must be considered owners in addition to the application/team owner
   co-owners:
-```
+{% endhighlight %}
 
 The only thing you need to change here right now is the ```discord-token``` variable at the very beginning of the file. There's some other customization stuff you can change later if you want.  
 
