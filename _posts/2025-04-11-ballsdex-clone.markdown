@@ -133,7 +133,7 @@ Nearly done. Run the following commands to get your bot up (remember to update t
 
 ```cd admin_panel
 $Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
-python manage.py migrate``` 
+python manage.py migrate
 python manage.py collectstatic --no-input
 cd ..
 python -m ballsdex```
