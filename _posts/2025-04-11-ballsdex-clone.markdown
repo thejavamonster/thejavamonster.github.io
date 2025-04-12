@@ -131,22 +131,26 @@ The only thing you need to change here right now is the ```discord-token``` vari
 
 Nearly done. Run the following commands to get your bot up (remember to update the necessary variables in the enviroment variable):
 
-```cd admin_panel
+```
+cd admin_panel
 $Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
 python manage.py migrate
 python manage.py collectstatic --no-input
 cd ..
-python -m ballsdex```
+python -m ballsdex
+```
 
-Your bot is now up and running! Of course, there are no actual balls in here yet. Luckily, that can be done through an easy GUI. We'll need to open the admin panel. Open up a new terminal, so as to not kill your bot. First, you need to create an account that you can use to log in to the admin panel. You'll only need to do this once, though. ```cd``` to the ```admin_panel``` folder and run this command: ```poetry run python manage.py createsuperuser```. Follow the instructions it gives you.
+Your bot is now up and running! Of course, there are no actual balls in here yet. Luckily, that can be done through an easy GUI. We'll need to open the admin panel. Open up a new terminal, so as to not kill your bot. First, you need to create an account that you can use to log in to the admin panel. You'll only need to do this once, though. ```cd``` to the ```/admin_panel``` folder and run this command: ```poetry run python manage.py createsuperuser```. Follow the instructions it gives you.
 
 
 Then run these commands (remember to update the necessary variables in the enviroment variable):
 
-```poetry shell
+```
+poetry shell
 cd BallsDex-DiscordBot/admin_panel
-$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name
-uvicorn admin_panel.asgi:application```
+$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
+uvicorn admin_panel.asgi:application
+```
 
 If all goes well, you should get this output:
 
@@ -156,4 +160,26 @@ Follow the localhost link it gives you and log in with the username and password
 
 ![image](https://github.com/user-attachments/assets/6eb6b061-5b9d-48b9-86b1-56290ba19bd2)
 
+
+
+Congratulations! To add your bot to a server, look under the "Installation" tab of your bot application page to find an invite link. Here's a recap on how to get your bot running:
+
+Run these to get your bot online:
+```
+cd BallsDex-DiscordBot/admin_panel
+$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
+python manage.py migrate
+python manage.py collectstatic --no-input
+cd ..
+python -m ballsdex
+```
+
+Open up a **new terminal** and run these commands to access your admin panel:
+```
+cd BallsDex-DiscordBot/admin_panel
+poetry shell
+cd BallsDex-DiscordBot/admin_panel
+$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'
+uvicorn admin_panel.asgi:application
+```
 
