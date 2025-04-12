@@ -41,33 +41,38 @@ Now, run ```poetry install``` to install all the dependencies for the bot. It mi
 
 Run ```poetry shell``` to make sure your venv is activated correctly, then run ```python -m ballsdex --version``` to check that everything got installed right.
 
-If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```. Open that up and enter this into it:
+If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```. Open that up and enter this into it (this is just the default Ballsdex config):
 
-{% highlight json %}
+```
 # yaml-language-server: $schema=json-config-ref.json
 
-# paste the access token you generated earlier here
+# paste the bot token after regenerating it here
 discord-token: INSERT_TOKEN_HERE
 
+# prefix for old-style text commands, mostly unused
 text-prefix: b.
+
+# define the elements given with the /about command
 about:
 
-  # replace this with any information you want to include on the bot's about me page
+  # define the beginning of the description of /about
+  # the other parts is automatically generated
   description: >
     Collect countryballs on Discord, exchange them and battle with friends!
 
+  # override this if you have a fork
   github-link: https://github.com/laggron42/BallsDex-DiscordBot
 
+  # valid invite for a Discord server
   discord-invite: https://discord.gg/ballsdex  # BallsDex official server
 
-  # these are just the default TOS pages
   terms-of-service: https://gist.github.com/laggron42/52ae099c55c6ee1320a260b0a3ecac4e
   privacy-policy: https://gist.github.com/laggron42/1eaa122013120cdfcc6d27f9485fe0bf
 
-# this is what will show up in your server when a ball spawns, you can change it if you want
+# override the name "countryballs" in the bot
 collectible-name: countryball
 
-# self-explanatory
+# override the name "BallsDex" in the bot
 bot-name: BallsDex
 
 # players group cog command name
@@ -120,5 +125,34 @@ owners:
 
   # a list of IDs that must be considered owners in addition to the application/team owner
   co-owners:
+```
 
-{% endhighlight %}
+The only thing you need to change here right now is the ```discord-token``` variable at the very beginning of the file. There's some other customization stuff you can change later if you want.  
+
+Nearly done. Run the following commands to get your bot up:
+
+```cd admin_panel```
+```$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name'``` (replace all the necessary variables)
+```python manage.py migrate``` to initialize the database
+```python manage.py collectstatic --no-input``` to initialize the admin panel
+```cd ..```
+```python -m ballsdex```
+
+Your bot is now up and running! Of course, there are no actual balls in here yet. Luckily, that can be done through an easy GUI. We'll need to open the admin panel. Open up a new terminal, so as to not kill your bot. First, you need to create an account that you can use to log in to the admin panel. You'll only need to do this once, though. ```cd``` to the ```admin_panel``` folder and run this command: ```poetry run python3 manage.py createsuperuser```. Follow the instructions it gives you.
+
+
+Then run these commands:
+```poetry shell```
+```cd BallsDex-DiscordBot/admin_panel```
+```$Env:BALLSDEXBOT_DB_URL = 'postgres://username:password@localhost:5432/database_name``` 
+```uvicorn admin_panel.asgi:application```
+
+If all goes well, you should get this output:
+
+![image](https://github.com/user-attachments/assets/811e255b-fd60-42cb-aa3d-28b8fa3de826)
+
+Follow the localhost link it gives you and log in with the username and password you set. You should now be able to access the admin panel, where you can configure your bot and add balls.
+
+![image](https://github.com/user-attachments/assets/6eb6b061-5b9d-48b9-86b1-56290ba19bd2)
+
+
