@@ -50,63 +50,32 @@ If everything looks good, run ```python -m ballsdex --reset-settings``` to creat
 
 {% highlight yaml %}
 # yaml-language-server: $schema=json-config-ref.json
-
 # paste the bot token after regenerating it here
 discord-token: INSERT_TOKEN_HERE
-
-# prefix for old-style text commands, mostly unused
 text-prefix: b.
-
-# define the elements given with the /about command
 about:
-
-  # define the beginning of the description of /about
-  # the other parts is automatically generated
   description: >
     Collect countryballs on Discord, exchange them and battle with friends!
-
-  # override this if you have a fork
   github-link: https://github.com/laggron42/BallsDex-DiscordBot
-
   # valid invite for a Discord server
   discord-invite: https://discord.gg/ballsdex  # BallsDex official server
-
   terms-of-service: https://gist.github.com/laggron42/52ae099c55c6ee1320a260b0a3ecac4e
   privacy-policy: https://gist.github.com/laggron42/1eaa122013120cdfcc6d27f9485fe0bf
 
 # override the name "countryballs" in the bot
 collectible-name: countryball
-
 # override the name "BallsDex" in the bot
 bot-name: BallsDex
-
-# players group cog command name
 # this is /balls by default, but you can change it for /animals or /rocks for example
 players-group-cog-name: balls
-
 # enables the /admin command
 admin-command:
-
-  # all items here are list of IDs. example on how to write IDs in a list:
-  # guild-ids:
-  #   - 1049118743101452329
-  #   - 1078701108500897923
-
   # list of guild IDs where /admin should be registered
   guild-ids:
-    - 1049118743101452329
-
   # list of role IDs having full access to /admin
   root-role-ids:
-    - 1049119446372986921
-    - 1049119786988212296
-    - 1095015474846248970
-
   # list of role IDs having partial access to /admin
   admin-role-ids:
-    - 1073775485840003102
-    - 1073776116898218036
-
 packages:
   - ballsdex.packages.admin
   - ballsdex.packages.balls
@@ -115,7 +84,6 @@ packages:
   - ballsdex.packages.info
   - ballsdex.packages.players
   - ballsdex.packages.trade
-
 # prometheus metrics collection, leave disabled if you don't know what this is
 prometheus:
   enabled: true
@@ -123,13 +91,50 @@ prometheus:
   port: 15260
 
 
+
 # manage bot ownership
 owners:
   # if enabled and the application is under a team, all team members will be considered as owners
-  team-members-are-owners: true
+  team-members-are-owners: false
 
   # a list of IDs that must be considered owners in addition to the application/team owner
   co-owners:
+
+# maximum amount of favorites that are allowed
+max-favorites: 50
+
+# the highest/lowest possible attack bonus, do not leave empty
+# this cannot be smaller than 0, enter a positive number
+max-attack-bonus: 20
+
+# the highest/lowest possible health bonus, do not leave empty
+# this cannot be smaller than 0, enter a positive number
+max-health-bonus: 20
+
+# WORK IN PROGRESS, DOES NOT FULLY WORK
+# override the name "countryballs" in the bot
+plural-collectible-name: countryballs
+
+# define a custom spawn manager implementation
+spawn-manager: ballsdex.packages.countryballs.spawn.SpawnManager
+
+# Admin panel related settings
+admin-panel:
+
+    # to enable Discord OAuth2 login, fill this
+    # client ID of the Discord application (not the bot's user ID)
+    client-id:
+    # client secret of the Discord application (this is not the bot token)
+    client-secret:
+
+    # to get admin notifications from the admin panel, create a Discord webhook and paste the url
+    webhook-url:
+
+    # this will provide some hyperlinks to the admin panel when using /admin commands
+    # set to an empty string to disable those links entirely
+    url: http://localhost:8000
+
+
 {% endhighlight %}
 
 The only thing you need to change here right now is the ```discord-token``` variable at the very beginning of the file. There's some other customization stuff you can change later if you want.  
