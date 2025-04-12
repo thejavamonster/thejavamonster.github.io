@@ -41,4 +41,84 @@ Now, run ```poetry install``` to install all the dependencies for the bot. It mi
 
 Run ```poetry shell``` to make sure your venv is activated correctly, then run ```python -m ballsdex --version``` to check that everything got installed right.
 
-If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```.
+If everything looks good, run ```python -m ballsdex --reset-settings``` to create a configuration file. It should be called ```config.yml```. Open that up and enter this into it:
+
+{% highlight yaml %}
+# yaml-language-server: $schema=json-config-ref.json
+
+# paste the access token you generated earlier here
+discord-token: INSERT_TOKEN_HERE
+
+text-prefix: b.
+about:
+
+  # replace this with any information you want to include on the bot's about me page
+  description: >
+    Collect countryballs on Discord, exchange them and battle with friends!
+
+  github-link: https://github.com/laggron42/BallsDex-DiscordBot
+
+  discord-invite: https://discord.gg/ballsdex  # BallsDex official server
+
+  # these are just the default TOS pages
+  terms-of-service: https://gist.github.com/laggron42/52ae099c55c6ee1320a260b0a3ecac4e
+  privacy-policy: https://gist.github.com/laggron42/1eaa122013120cdfcc6d27f9485fe0bf
+
+# this is what will show up in your server when a ball spawns, you can change it if you want
+collectible-name: countryball
+
+# self-explanatory
+bot-name: BallsDex
+
+# players group cog command name
+# this is /balls by default, but you can change it for /animals or /rocks for example
+players-group-cog-name: balls
+
+# enables the /admin command
+admin-command:
+
+  # all items here are list of IDs. example on how to write IDs in a list:
+  # guild-ids:
+  #   - 1049118743101452329
+  #   - 1078701108500897923
+
+  # list of guild IDs where /admin should be registered
+  guild-ids:
+    - 1049118743101452329
+
+  # list of role IDs having full access to /admin
+  root-role-ids:
+    - 1049119446372986921
+    - 1049119786988212296
+    - 1095015474846248970
+
+  # list of role IDs having partial access to /admin
+  admin-role-ids:
+    - 1073775485840003102
+    - 1073776116898218036
+
+packages:
+  - ballsdex.packages.admin
+  - ballsdex.packages.balls
+  - ballsdex.packages.config
+  - ballsdex.packages.countryballs
+  - ballsdex.packages.info
+  - ballsdex.packages.players
+  - ballsdex.packages.trade
+
+# prometheus metrics collection, leave disabled if you don't know what this is
+prometheus:
+  enabled: true
+  host: "0.0.0.0"
+  port: 15260
+
+
+# manage bot ownership
+owners:
+  # if enabled and the application is under a team, all team members will be considered as owners
+  team-members-are-owners: true
+
+  # a list of IDs that must be considered owners in addition to the application/team owner
+  co-owners:
+
+{% endhighlight %}
