@@ -1,9 +1,0 @@
-name: thejavamonster
-baseurl: https://thejavamonster.github.io
-description: i yap, therefore i am
-
-permalink: /:year/:month/:day/:title/
-paginate: 10
-pygments: true
-
-exclude: ['README.md']
