@@ -5,6 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miller's Epic Website</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ticker.css">
+    <style>
+        /* Full-width responsive grid for app cards */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin: 1rem 0 2rem;
+        }
+        .app-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+        .app-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        .app-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+            background: #f3f3f3;
+        }
+        .app-body {
+            padding: 10px 12px 12px;
+        }
+        .app-title {
+            margin: 0 0 6px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .app-desc {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.35;
+            color: #333;
+        }
+    </style>
     </head>
     <body>  
     <header>
@@ -19,18 +65,67 @@
             </ul>
         </nav>
     </header>
-    <marquee><h1>My projects</h1></marquee>
+    <div class="ticker-wrap">
+        <div id="news-ticker" class="ticker">Loading headlines…</div>
+    </div>
     <h2>Web apps</h2>
-    <a href="https://thejavamonster.github.io/globe/">A 3d visualization of the earth with country data, weather, and current news. its slow and im gonna fix that.</a><br>
-    <a href="https://websudoku.me/">An online sudoku game that I made with my bud for a hackathon</a><br>
-    <a href="https://gtrends-1heb.onrender.com/">A live map of the US showing the top trending search in every state</a><br>
-    <a href="https://nextbreak.github.io/">A countdown until the next day off from school</a><br>
-    <a href="https://coursereviews.onrender.com/">A class-reviews website for my school that is broken because i don't know how to use sql</a><br>
-    <a href="https://thejavamonster.github.io/hscfinal/">My 10th grade core class final</a><br>
-    <a href="/">coming soon- an interactive world map going from the 1800s to today</a>
+    <div class="apps-grid">
+        <a class="app-card" href="https://thejavamonster.github.io/globe/" target="_blank" rel="noopener">
+            <img src="images/globe.png" alt="3D Globe visualization app screenshot">
+            <div class="app-body">
+                <h3 class="app-title">Globe</h3>
+                <p class="app-desc">A 3D visualization of the Earth with country data, weather, and current news. It’s slow and I’m gonna fix that.</p>
+            </div>
+        </a>
+        <a class="app-card" href="https://websudoku.me/" target="_blank" rel="noopener">
+            <img src="images/sudoku.png" alt="Online Sudoku game screenshot">
+            <div class="app-body">
+                <h3 class="app-title">Web Sudoku</h3>
+                <p class="app-desc">An online Sudoku game that I made for a hackathon.</p>
+            </div>
+        </a>
+        <a class="app-card" href="https://gtrends-1heb.onrender.com/" target="_blank" rel="noopener">
+            <img src="images/gtrends.png" alt="US map showing Google search trends">
+            <div class="app-body">
+                <h3 class="app-title">GTrends Map</h3>
+                <p class="app-desc">A live map of the US showing the top trending search in every state.</p>
+            </div>
+        </a>
+        <a class="app-card" href="https://nextbreak.github.io/" target="_blank" rel="noopener">
+            <img src="images/nextbreak.png" alt="NextBreak countdown screenshot">
+            <div class="app-body">
+                <h3 class="app-title">NextBreak</h3>
+                <p class="app-desc">A countdown until the next day off from school.</p>
+            </div>
+        </a>
+        <a class="app-card" href="https://coursereviews.onrender.com/" target="_blank" rel="noopener">
+            <img src="images/reviews.png" alt="Course reviews site screenshot">
+            <div class="app-body">
+                <h3 class="app-title">Course Reviews</h3>
+                <p class="app-desc">A class-reviews website for my school that is broken because I don't know how to use SQL.</p>
+            </div>
+        </a>
+        <a class="app-card" href="https://thejavamonster.github.io/hscfinal/" target="_blank" rel="noopener">
+            <img src="images/hsc.png" alt="10th grade core class final project screenshot">
+            <div class="app-body">
+                <h3 class="app-title">HSC Final</h3>
+                <p class="app-desc">My 10th grade core class final.</p>
+            </div>
+        </a>
+        <a class="app-card" href="/" rel="noopener">
+            <div class="app-body">
+                <h3 class="app-title">Coming Soon</h3>
+                <p class="app-desc">An interactive world map going from the 1800s to today.</p>
+            </div>
+        </a>
+        
+    </div>
     <h2>Chrome extensions</h2>
     <a href="https://chromewebstore.google.com/detail/fjobhoffbihafojpbcjmadfhogloklkg">A chrome extension for my school that shows gpa on the grades page</a><br>
     <a href="/">coming soon- a built-in pdf annotation tool for chrome</a>
+    <script src="ticker.js"></script>
+        <img src="illuminati-memes.gif" alt="A picture of me" style="position: fixed; bottom: 0px; right: 0px;">
+
 
     </body>
 

@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miller's Epic Website</title>
+    <title>Planet Miller</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ticker.css">
     </head>
     <body>  
     <header>
-        <h1>Miller's Planet</h1>
+        <h1>Planet Miller</h1>
         <nav>
             <ul>
                 <li><a href="index.html">home</a></li>
@@ -19,12 +20,14 @@
             </ul>
         </nav>
     </header>
-    <marquee><h1>hello</h1></marquee>
+    <div class="ticker-wrap">
+        <div id="news-ticker" class="ticker">Loading headlines…</div>
+    </div>
     <p>thank you for visiting Planet Miller</p>
             <table>
             <tr>
                 <th>Name</th>
-                <td>miller</td>
+                <td>Jules Miller</td>
             </tr>
             <tr>
                 <th>Species</th>
@@ -71,6 +74,9 @@
             ageCell.textContent = `${mantissaStr} × 10^${exponent} svedbergs`;
         })();
     </script>
+    <script src="ticker.js"></script>
+
+    <img src="illuminati-memes.gif" alt="Aae" style="position: fixed; bottom: 0px; right: 0px;">
     </body>
 
 

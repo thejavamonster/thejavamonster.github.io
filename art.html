@@ -1,12 +1,12 @@
----
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miller's Epic Website</title>
+    <title>Planet Miller</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E🎨%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ticker.css">
         <style>
             /* Simple responsive grid */
             .gallery {
@@ -34,216 +34,209 @@
                 color: #eee; font-size: 12px;
                 text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
             }
-
-            /* Lightbox */
-            .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; }
-            .lightbox.open { display: flex; }
-            .lightbox img { max-width: 92vw; max-height: 92vh; }
-            .lightbox .close { position: fixed; top: 16px; right: 16px; font-size: 24px; color: white; cursor: pointer; }
-            .lightbox .nav { position: fixed; top: 50%; transform: translateY(-50%); font-size: 36px; color: white; cursor: pointer; user-select: none; padding: 12px; }
-            .lightbox .prev { left: 12px; }
-            .lightbox .next { right: 12px; }
-
-            .empty, .error { padding: 24px; text-align: center; color: #999; }
+            .empty { padding: 24px; text-align: center; color: #999; }
+            
+            /* Lightbox overlay */
+            .lightbox {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.92);
+                z-index: 9999;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .lightbox.active { display: flex; }
+            .lightbox-content {
+                position: relative;
+                max-width: 90vw;
+                max-height: 90vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .lightbox img {
+                max-width: 100%;
+                max-height: 80vh;
+                object-fit: contain;
+                border-radius: 4px;
+            }
+            .lightbox-caption {
+                margin-top: 12px;
+                color: #fff;
+                font-size: 18px;
+                text-align: center;
+            }
+            .lightbox-close {
+                position: absolute;
+                top: 10px; right: 10px;
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: #fff;
+                font-size: 32px;
+                width: 48px; height: 48px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s;
+            }
+            .lightbox-close:hover { background: rgba(255,255,255,0.3); }
+            .lightbox-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: #fff;
+                font-size: 36px;
+                width: 56px; height: 56px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s;
+            }
+            .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+            .lightbox-nav.prev { left: 20px; }
+            .lightbox-nav.next { right: 20px; }
+            </style>
+        </head>
+        <body>  
+        <header>
+            <h1>Planet Miller</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">home</a></li>
+                    <li><a href="webapps.html">web apps</a></li>
+                    <li><a href="videos.html">videos</a></li>
+                    <li><a href="art.html">art</a></li>
+                    <li><a href="contact.html">contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="ticker-wrap">
+            <div id="news-ticker" class="ticker">Loading headlines…</div>
+        </div>
+            <h2>Art</h2>
+            <main>
+                <section id="gallery" class="gallery" aria-live="polite"></section>
+            </main>
+            
+            <!-- Lightbox overlay -->
+            <div id="lightbox" class="lightbox">
+                <button class="lightbox-close" aria-label="Close">&times;</button>
+                <button class="lightbox-nav prev" aria-label="Previous">‹</button>
+                <button class="lightbox-nav next" aria-label="Next">›</button>
+                <div class="lightbox-content">
+                    <img id="lightbox-img" src="" alt="">
+                    <div id="lightbox-caption" class="lightbox-caption"></div>
+                </div>
+            </div>
+                <script>
+                        // Manual list of image filenames in the 'art' folder. Update this array when you add/remove files.
+                        const FILES = [
+                            'africa.png','asia.png','bat.png','brayden.png','chickadee.png','europe.png','fish.png','idek.png','javanmagpie.png','legolas.png','northamerica.png','skelly.png','southamerica.png','squirrel.png','stewart.png','weasel.png'
+                        ];
+                        const BASE = 'art/';
+                        const gallery = document.getElementById('gallery');
+                        function pretty(name) {
+                            const base = name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').trim();
+                            return base.replace(/(^|\s)\S/g, t => t.toUpperCase());
+                        }
+                        // Lightbox state
+                        let currentIndex = 0;
+                        const lightbox = document.getElementById('lightbox');
+                        const lightboxImg = document.getElementById('lightbox-img');
+                        const lightboxCaption = document.getElementById('lightbox-caption');
+                        
+                        function openLightbox(index) {
+                            currentIndex = index;
+                            const file = FILES[currentIndex];
+                            const src = BASE + file;
+                            const title = pretty(file);
+                            lightboxImg.src = src;
+                            lightboxImg.alt = title;
+                            lightboxCaption.textContent = title;
+                            lightbox.classList.add('active');
+                            document.body.style.overflow = 'hidden';
+                        }
+                        
+                        function closeLightbox() {
+                            lightbox.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                        
+                        function navigate(direction) {
+                            currentIndex = (currentIndex + direction + FILES.length) % FILES.length;
+                            openLightbox(currentIndex);
+                        }
+                        
+                        // Lightbox controls
+                        document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+                        document.querySelector('.lightbox-nav.prev').addEventListener('click', () => navigate(-1));
+                        document.querySelector('.lightbox-nav.next').addEventListener('click', () => navigate(1));
+                        lightbox.addEventListener('click', (e) => {
+                            if (e.target === lightbox) closeLightbox();
+                        });
+                        
+                        // Keyboard navigation
+                        document.addEventListener('keydown', (e) => {
+                            if (!lightbox.classList.contains('active')) return;
+                            if (e.key === 'Escape') closeLightbox();
+                            if (e.key === 'ArrowLeft') navigate(-1);
+                            if (e.key === 'ArrowRight') navigate(1);
+                        });
+                        
+                        (function render() {
+                            const frag = document.createDocumentFragment();
+                            FILES.forEach((file, index) => {
+                                const src = BASE + file;
+                                const title = pretty(file);
+                                const fig = document.createElement('figure');
+                                fig.className = 'card';
+                                fig.setAttribute('role', 'group');
+                                fig.tabIndex = 0;
+                                fig.style.cursor = 'pointer';
+                                
+                                const img = document.createElement('img'); 
+                                img.loading = 'lazy'; 
+                                img.decoding = 'async'; 
+                                img.src = src; 
+                                img.alt = title;
+                                
+                                const cap = document.createElement('figcaption'); 
+                                cap.textContent = title;
+                                
+                                fig.appendChild(img); 
+                                fig.appendChild(cap);
+                                
+                                // Open lightbox on click
+                                fig.addEventListener('click', () => openLightbox(index));
+                                fig.addEventListener('keydown', (e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        openLightbox(index);
+                                    }
+                                });
+                                
+                                frag.appendChild(fig);
+                            });
+                            gallery.innerHTML = ''; 
+                            gallery.appendChild(frag);
+                        })();
+                </script>
+    <script src="ticker.js"></script>
         </style>
     </head>
-    <body>  
-    <header>
-        <h1>Miller's Planet</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">home</a></li>
-                <li><a href="webapps.html">web apps</a></li>
-                <li><a href="videos.html">videos</a></li>
-                <li><a href="art.html">art</a></li>
-                <li><a href="contact.html">contact</a></li>
-            </ul>
-        </nav>
-    </header>
-        <marquee><h1>Art</h1></marquee>
-        <h2>Art</h2>
-                <main>
-                        <section id="gallery" class="gallery" aria-live="polite"></section>
-                        <template id="jekyll-images">[
-                            {% assign comma = '' %}
-                            {% for f in site.static_files %}
-                                {% if f.path contains '/art/' %}
-                                    {% assign ext = f.extname | downcase %}
-                                    {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.gif' or ext == '.webp' or ext == '.bmp' or ext == '.svg' %}
-                                        {{ comma }}{"src":"{{ f.path | relative_url }}","title":"{{ f.name | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | capitalize }}"}
-                                        {% assign comma = ',' %}
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        ]</template>
-            <p class="empty" id="emptyMsg" hidden>No images yet. Drop files into <code>art</code> and refresh.</p>
-            <p class="error" id="errorMsg" hidden>Could not load gallery. Make sure you're serving locally and have images in <code>art</code>.</p>
-        </main>
+    <img src="illuminati-memes.gif" alt="A picture of me" style="position: fixed; bottom: 0px; right: 0px;">
 
-        <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Image viewer">
-            <button class="close" id="lbClose" aria-label="Close">✕</button>
-            <button class="nav prev" id="lbPrev" aria-label="Previous">‹</button>
-            <img id="lbImage" alt="" />
-            <button class="nav next" id="lbNext" aria-label="Next">›</button>
-        </div>
-s
-        <script>
-            // Prefer Jekyll-provided list (GH Pages). Fallback locally to directory scrape.
-            const IMAGES_DIR = 'art/';
-            const IMG_EXT = ['.jpg','.jpeg','.png','.gif','.webp','.bmp','.svg'];
+</body>  
 
-            function getJekyllItems() {
-                try {
-                    const tpl = document.getElementById('jekyll-images');
-                    if (!tpl) { console.log('No template found'); return []; }
-                    const txt = tpl.textContent;
-                    // Extract all JSON objects from the template using a regex
-                    const matches = txt.match(/\{[^}]+\}/g);
-                    console.log('Extracted objects:', matches);
-                    if (!matches || matches.length === 0) { console.log('No matches found'); return []; }
-                    // Build a valid JSON array string
-                    const arrStr = '[' + matches.join(',') + ']';
-                    let arr;
-                    try {
-                        arr = JSON.parse(arrStr);
-                    } catch (e) {
-                        console.log('JSON parse error:', e, arrStr);
-                        return [];
-                    }
-                    console.log('Parsed array:', arr);
-                    if (Array.isArray(arr)) return arr;
-                    return [];
-                } catch (e) { console.log('getJekyllItems error:', e); return []; }
-            }
-
-            async function listImages() {
-                const res = await fetch(IMAGES_DIR, { cache: 'no-store' });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const html = await res.text();
-                const doc = new DOMParser().parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'))
-                  .map(a => a.getAttribute('href'))
-                  .filter(href => !!href && !href.startsWith('?') && !href.startsWith('/'));
-
-                const items = links
-                  .map(href => decodeURIComponent(href))
-                  .filter(href => IMG_EXT.some(ext => href.toLowerCase().endsWith(ext)))
-                  .map(name => ({ src: IMAGES_DIR + name, title: prettify(name) }));
-                return items;
-            }
-
-            function prettify(fileName) {
-                const base = fileName.replace(/\/?([^\/]+)$/,'$1').replace(/\.[^.]+$/,'');
-                return base.replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim().replace(/(^|\s)\S/g, t => t.toUpperCase());
-            }
-
-            function renderGallery(items) {
-                const container = document.getElementById('gallery');
-                container.innerHTML = '';
-                const frag = document.createDocumentFragment();
-
-                items.forEach((item, idx) => {
-                    const { src, title } = item;
-                    if (!src) return;
-
-                    const fig = document.createElement('figure');
-                    fig.className = 'card';
-                    fig.tabIndex = 0;
-                    fig.setAttribute('role', 'group');
-
-                    const img = document.createElement('img');
-                    img.loading = 'lazy';
-                    img.decoding = 'async';
-                    img.src = src;
-                    img.alt = title || 'Artwork';
-
-                    const cap = document.createElement('figcaption');
-                    cap.textContent = title || '';
-
-                    fig.appendChild(img);
-                    fig.appendChild(cap);
-                    fig.addEventListener('click', () => openLightbox(items, idx));
-                    fig.addEventListener('keypress', (e) => { if (e.key === 'Enter') openLightbox(items, idx); });
-
-                    frag.appendChild(fig);
-                });
-
-                container.appendChild(frag);
-            }
-
-            let lbIndex = -1;
-            let lbItems = [];
-
-            function openLightbox(items, index) {
-                lbItems = items;
-                lbIndex = index;
-                const lb = document.getElementById('lightbox');
-                lb.classList.add('open');
-                updateLightbox();
-            }
-
-            function updateLightbox() {
-                if (lbIndex < 0 || lbIndex >= lbItems.length) return closeLightbox();
-                const { src, title } = lbItems[lbIndex];
-                const img = document.getElementById('lbImage');
-                img.src = src;
-                img.alt = title || 'Artwork';
-            }
-
-            function closeLightbox() {
-                document.getElementById('lightbox').classList.remove('open');
-                lbIndex = -1;
-                lbItems = [];
-            }
-
-            function nav(delta) {
-                if (!lbItems.length) return;
-                lbIndex = (lbIndex + delta + lbItems.length) % lbItems.length;
-                updateLightbox();
-            }
-
-            document.getElementById('lbClose').addEventListener('click', closeLightbox);
-            document.getElementById('lbPrev').addEventListener('click', () => nav(-1));
-            document.getElementById('lbNext').addEventListener('click', () => nav(1));
-            document.getElementById('lightbox').addEventListener('click', (e) => { if (e.target.id === 'lightbox') closeLightbox(); });
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeLightbox();
-                if (e.key === 'ArrowLeft') nav(-1);
-                if (e.key === 'ArrowRight') nav(1);
-            });
-
-            (async function init() {
-                const emptyMsg = document.getElementById('emptyMsg');
-                const errorMsg = document.getElementById('errorMsg');
-                try {
-                    // Try Jekyll-provided list first (GH Pages)
-                    const jekyllItems = getJekyllItems();
-                    if (jekyllItems.length > 0) {
-                        renderGallery(jekyllItems);
-                        emptyMsg.hidden = true;
-                        return;
-                    }
-
-                    // Only run local fallback if not on GitHub Pages
-                    const isGithubPages = location.hostname.endsWith('.github.io');
-                    if (!isGithubPages) {
-                        const data = await listImages();
-                        if (!Array.isArray(data) || data.length === 0) {
-                            emptyMsg.hidden = false;
-                            return;
-                        }
-                        renderGallery(data);
-                    } else {
-                        emptyMsg.hidden = false;
-                    }
-                } catch (err) {
-                    console.error('Gallery load failed:', err);
-                    errorMsg.hidden = false;
-                }
-            })();
-        </script>
-
-    </body>
+        
 
 
 </html>

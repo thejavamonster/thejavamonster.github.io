@@ -1,0 +1,37 @@
+/* Smooth infinite scroll news ticker */
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: #ff0000;
+    padding: 8px 0;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    color: #fff;
+
+}
+
+.ticker {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll 120s linear infinite;
+    
+}
+
+.ticker a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 4px;
+    font-size: x-large;
+}
+
+.ticker a:hover {
+    text-decoration: underline;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
