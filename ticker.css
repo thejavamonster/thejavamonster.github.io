@@ -17,7 +17,8 @@
     display: inline-block;
     white-space: nowrap;
     animation: scroll 120s linear infinite;
-    
+    will-change: transform;
+    animation-play-state: running;
 }
 
 .ticker a {

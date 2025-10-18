@@ -10,8 +10,16 @@
         ticker.textContent = msg || 'NYT US headlines unavailable.';
     }
 
-    fetch(PROXY, { cache: 'no-store' })
+    // Add timeout to fail fast if proxy is slow
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    fetch(PROXY, { 
+        signal: controller.signal,
+        cache: 'default' // Allow caching to speed up subsequent loads
+    })
         .then(res => {
+            clearTimeout(timeoutId); // Clear timeout on success
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.text();
         })
@@ -51,7 +59,13 @@
             ticker.appendChild(content);
         })
         .catch(err => {
-            console.error('News ticker error:', err);
-            setFallback();
+            clearTimeout(timeoutId); // Clear timeout on error
+            if (err.name === 'AbortError') {
+                console.warn('News ticker: Request timed out after 5 seconds');
+                setFallback('Headlines loading timed out');
+            } else {
+                console.error('News ticker error:', err);
+                setFallback();
+            }
         });
 })();
