@@ -95,17 +95,25 @@ s
             function getJekyllItems() {
                 try {
                     const tpl = document.getElementById('jekyll-images');
-                    if (!tpl) return [];
+                    if (!tpl) { console.log('No template found'); return []; }
                     const txt = tpl.textContent;
                     // Extract all JSON objects from the template using a regex
                     const matches = txt.match(/\{[^}]+\}/g);
-                    if (!matches || matches.length === 0) return [];
+                    console.log('Extracted objects:', matches);
+                    if (!matches || matches.length === 0) { console.log('No matches found'); return []; }
                     // Build a valid JSON array string
                     const arrStr = '[' + matches.join(',') + ']';
-                    const arr = JSON.parse(arrStr);
+                    let arr;
+                    try {
+                        arr = JSON.parse(arrStr);
+                    } catch (e) {
+                        console.log('JSON parse error:', e, arrStr);
+                        return [];
+                    }
+                    console.log('Parsed array:', arr);
                     if (Array.isArray(arr)) return arr;
                     return [];
-                } catch (e) { return []; }
+                } catch (e) { console.log('getJekyllItems error:', e); return []; }
             }
 
             async function listImages() {
