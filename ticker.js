@@ -1,28 +1,53 @@
 // Shared news ticker functionality
-// Populate the ticker with headlines from NYTimes US RSS using a CORS-friendly proxy
+// Populate the ticker with headlines from NYTimes US RSS using multiple CORS proxy fallbacks
 (function () {
     const FEED_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml';
-    const PROXY = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(FEED_URL);
     const ticker = document.getElementById('news-ticker');
     if (!ticker) return;
 
+    // Multiple CORS proxies to try in order
+    const PROXIES = [
+        'https://corsproxy.io/?' + encodeURIComponent(FEED_URL),
+        'https://api.allorigins.win/raw?url=' + encodeURIComponent(FEED_URL),
+        'https://cors-anywhere.herokuapp.com/' + FEED_URL
+    ];
+
     function setFallback(msg) {
-        ticker.textContent = msg || 'NYT US headlines unavailable.';
+        ticker.textContent = msg || 'Loading news headlines...';
     }
 
-    // Add timeout to fail fast if proxy is slow
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-    fetch(PROXY, { 
-        signal: controller.signal,
-        cache: 'default' // Allow caching to speed up subsequent loads
-    })
-        .then(res => {
-            clearTimeout(timeoutId); // Clear timeout on success
+    async function fetchWithProxy(proxyUrl, timeout = 3000) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+            const res = await fetch(proxyUrl, { 
+                signal: controller.signal,
+                cache: 'default'
+            });
+            clearTimeout(timeoutId);
             if (!res.ok) throw new Error('HTTP ' + res.status);
-            return res.text();
-        })
+            return await res.text();
+        } catch (err) {
+            clearTimeout(timeoutId);
+            throw err;
+        }
+    }
+
+    async function tryProxies() {
+        for (let i = 0; i < PROXIES.length; i++) {
+            try {
+                console.log(`Trying proxy ${i + 1}/${PROXIES.length}...`);
+                const xmlText = await fetchWithProxy(PROXIES[i]);
+                return xmlText;
+            } catch (err) {
+                console.warn(`Proxy ${i + 1} failed:`, err.message);
+                if (i === PROXIES.length - 1) throw err;
+            }
+        }
+    }
+
+    tryProxies()
         .then(xmlText => {
             const doc = new DOMParser().parseFromString(xmlText, 'application/xml');
             const items = Array.from(doc.querySelectorAll('item'));
@@ -59,13 +84,7 @@
             ticker.appendChild(content);
         })
         .catch(err => {
-            clearTimeout(timeoutId); // Clear timeout on error
-            if (err.name === 'AbortError') {
-                console.warn('News ticker: Request timed out after 5 seconds');
-                setFallback('Headlines loading timed out');
-            } else {
-                console.error('News ticker error:', err);
-                setFallback();
-            }
+                console.error('News ticker: All proxies failed', err);
+                setFallback('Unable to load headlines');
         });
 })();
