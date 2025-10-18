@@ -96,7 +96,9 @@
                 try {
                     const tpl = document.getElementById('jekyll-images');
                     if (!tpl) return [];
-                    const txt = tpl.textContent.trim();
+                    // Remove newlines and excessive whitespace between JSON objects
+                    let txt = tpl.textContent.replace(/\s+/g, ' ');
+                    txt = txt.replace(/,\s*{/g, ',{').replace(/\[\s*{/g, '[{').replace(/}\s*]/g, '}]').trim();
                     if (!txt || !txt.startsWith('[')) return [];
                     const arr = JSON.parse(txt);
                     if (Array.isArray(arr)) return arr;
