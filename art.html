@@ -100,13 +100,11 @@ s
                     // Extract all JSON objects from the template using a regex
                     const matches = txt.match(/\{[^}]+\}/g);
                     if (!matches || matches.length === 0) return [];
-                    const arr = matches.map(objStr => {
-                        try {
-                            // Remove trailing commas if present
-                            return JSON.parse(objStr.replace(/,\s*}/g, '}'));
-                        } catch (e) { return null; }
-                    }).filter(Boolean);
-                    return arr;
+                    // Build a valid JSON array string
+                    const arrStr = '[' + matches.join(',') + ']';
+                    const arr = JSON.parse(arrStr);
+                    if (Array.isArray(arr)) return arr;
+                    return [];
                 } catch (e) { return []; }
             }
 
