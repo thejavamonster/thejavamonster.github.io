@@ -96,12 +96,17 @@ s
                 try {
                     const tpl = document.getElementById('jekyll-images');
                     if (!tpl) return [];
-                    // Remove all whitespace/newlines between JSON objects
-                    let txt = tpl.textContent.replace(/\n|\r/g, '').replace(/\s*{\s*/g, '{').replace(/}\s*,\s*/g, '},').replace(/}\s*]/g, '}]').replace(/\[\s*{/g, '[{').trim();
-                    if (!txt || !txt.startsWith('[')) return [];
-                    const arr = JSON.parse(txt);
-                    if (Array.isArray(arr)) return arr;
-                    return [];
+                    const txt = tpl.textContent;
+                    // Extract all JSON objects from the template using a regex
+                    const matches = txt.match(/\{[^}]+\}/g);
+                    if (!matches || matches.length === 0) return [];
+                    const arr = matches.map(objStr => {
+                        try {
+                            // Remove trailing commas if present
+                            return JSON.parse(objStr.replace(/,\s*}/g, '}'));
+                        } catch (e) { return null; }
+                    }).filter(Boolean);
+                    return arr;
                 } catch (e) { return []; }
             }
 
