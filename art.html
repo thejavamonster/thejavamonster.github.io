@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miller's Epic Website</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E🎨%3C/text%3E%3C/svg%3E">
+        <style>
+            /* Simple responsive grid */
+            .gallery {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 12px;
+                padding: 16px;
+            }
+            .card {
+                position: relative;
+                overflow: hidden;
+                border-radius: 8px;
+                background: #111;
+                border: 1px solid #222;
+                aspect-ratio: 1 / 1;
+                display: grid;
+                place-items: center;
+            }
+            .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+            .card figcaption {
+                position: absolute;
+                bottom: 0; left: 0; right: 0;
+                padding: 6px 8px;
+                background: linear-gradient(transparent, rgba(0,0,0,0.65));
+                color: #eee; font-size: 12px;
+                text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+            }
+
+            /* Lightbox */
+            .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; }
+            .lightbox.open { display: flex; }
+            .lightbox img { max-width: 92vw; max-height: 92vh; }
+            .lightbox .close { position: fixed; top: 16px; right: 16px; font-size: 24px; color: white; cursor: pointer; }
+            .lightbox .nav { position: fixed; top: 50%; transform: translateY(-50%); font-size: 36px; color: white; cursor: pointer; user-select: none; padding: 12px; }
+            .lightbox .prev { left: 12px; }
+            .lightbox .next { right: 12px; }
+
+            .empty, .error { padding: 24px; text-align: center; color: #999; }
+        </style>
+    </head>
+    <body>  
+    <header>
+        <h1>Miller's Planet</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">home</a></li>
+                <li><a href="webapps.html">web apps</a></li>
+                <li><a href="videos.html">videos</a></li>
+                <li><a href="art.html">art</a></li>
+                <li><a href="contact.html">contact</a></li>
+            </ul>
+        </nav>
+    </header>
+        <marquee><h1>Art</h1></marquee>
+        <h2>Art</h2>
+                <main>
+                        <section id="gallery" class="gallery" aria-live="polite"></section>
+                        <template id="jekyll-images">[
+                            {% assign comma = '' %}
+                            {% for f in site.static_files %}
+                                {% if f.path contains '/images/art/' %}
+                                    {% assign ext = f.extname | downcase %}
+                                    {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.gif' or ext == '.webp' or ext == '.bmp' or ext == '.svg' %}
+                                        {{ comma }}{"src":"{{ f.path | relative_url }}","title":"{{ f.name | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | capitalize }}"}
+                                        {% assign comma = ',' %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        ]</template>
+            <p class="empty" id="emptyMsg" hidden>No images yet. Drop files into <code>images/art</code> and refresh.</p>
+            <p class="error" id="errorMsg" hidden>Could not load gallery. Make sure you're serving locally and have images in <code>images/art</code>.</p>
+        </main>
+
+        <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Image viewer">
+            <button class="close" id="lbClose" aria-label="Close">✕</button>
+            <button class="nav prev" id="lbPrev" aria-label="Previous">‹</button>
+            <img id="lbImage" alt="" />
+            <button class="nav next" id="lbNext" aria-label="Next">›</button>
+        </div>
+
+        <script>
+            // Prefer Jekyll-provided list (GH Pages). Fallback locally to directory scrape.
+            const IMAGES_DIR = '/art/';
+            const IMG_EXT = ['.jpg','.jpeg','.png','.gif','.webp','.bmp','.svg'];
+
+            function getJekyllItems() {
+                try {
+                    const tpl = document.getElementById('jekyll-images');
+                    if (!tpl) return [];
+                    const txt = tpl.textContent.trim();
+                    if (!txt || !txt.startsWith('[')) return [];
+                    const arr = JSON.parse(txt);
+                    if (Array.isArray(arr)) return arr;
+                    return [];
+                } catch (e) { return []; }
+            }
+
+            async function listImages() {
+                const res = await fetch(IMAGES_DIR, { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const html = await res.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'))
+                  .map(a => a.getAttribute('href'))
+                  .filter(href => !!href && !href.startsWith('?') && !href.startsWith('/'));
+
+                const items = links
+                  .map(href => decodeURIComponent(href))
+                  .filter(href => IMG_EXT.some(ext => href.toLowerCase().endsWith(ext)))
+                  .map(name => ({ src: IMAGES_DIR + name, title: prettify(name) }));
+                return items;
+            }
+
+            function prettify(fileName) {
+                const base = fileName.replace(/\/?([^\/]+)$/,'$1').replace(/\.[^.]+$/,'');
+                return base.replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim().replace(/(^|\s)\S/g, t => t.toUpperCase());
+            }
+
+            function renderGallery(items) {
+                const container = document.getElementById('gallery');
+                container.innerHTML = '';
+                const frag = document.createDocumentFragment();
+
+                items.forEach((item, idx) => {
+                    const { src, title } = item;
+                    if (!src) return;
+
+                    const fig = document.createElement('figure');
+                    fig.className = 'card';
+                    fig.tabIndex = 0;
+                    fig.setAttribute('role', 'group');
+
+                    const img = document.createElement('img');
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    img.src = src;
+                    img.alt = title || 'Artwork';
+
+                    const cap = document.createElement('figcaption');
+                    cap.textContent = title || '';
+
+                    fig.appendChild(img);
+                    fig.appendChild(cap);
+                    fig.addEventListener('click', () => openLightbox(items, idx));
+                    fig.addEventListener('keypress', (e) => { if (e.key === 'Enter') openLightbox(items, idx); });
+
+                    frag.appendChild(fig);
+                });
+
+                container.appendChild(frag);
+            }
+
+            let lbIndex = -1;
+            let lbItems = [];
+
+            function openLightbox(items, index) {
+                lbItems = items;
+                lbIndex = index;
+                const lb = document.getElementById('lightbox');
+                lb.classList.add('open');
+                updateLightbox();
+            }
+
+            function updateLightbox() {
+                if (lbIndex < 0 || lbIndex >= lbItems.length) return closeLightbox();
+                const { src, title } = lbItems[lbIndex];
+                const img = document.getElementById('lbImage');
+                img.src = src;
+                img.alt = title || 'Artwork';
+            }
+
+            function closeLightbox() {
+                document.getElementById('lightbox').classList.remove('open');
+                lbIndex = -1;
+                lbItems = [];
+            }
+
+            function nav(delta) {
+                if (!lbItems.length) return;
+                lbIndex = (lbIndex + delta + lbItems.length) % lbItems.length;
+                updateLightbox();
+            }
+
+            document.getElementById('lbClose').addEventListener('click', closeLightbox);
+            document.getElementById('lbPrev').addEventListener('click', () => nav(-1));
+            document.getElementById('lbNext').addEventListener('click', () => nav(1));
+            document.getElementById('lightbox').addEventListener('click', (e) => { if (e.target.id === 'lightbox') closeLightbox(); });
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') nav(-1);
+                if (e.key === 'ArrowRight') nav(1);
+            });
+
+            (async function init() {
+                const emptyMsg = document.getElementById('emptyMsg');
+                const errorMsg = document.getElementById('errorMsg');
+                try {
+                    // Try Jekyll-provided list first (GH Pages)
+                    const jekyllItems = getJekyllItems();
+                    if (jekyllItems.length > 0) {
+                        renderGallery(jekyllItems);
+                        emptyMsg.hidden = true;
+                        return;
+                    }
+
+                    // Local fallback: scrape python http.server directory listing
+                    const data = await listImages();
+                    if (!Array.isArray(data) || data.length === 0) {
+                        emptyMsg.hidden = false;
+                        return;
+                    }
+                    renderGallery(data);
+                } catch (err) {
+                    console.error('Gallery load failed:', err);
+                    errorMsg.hidden = false;
+                }
+            })();
+        </script>
+
+    </body>
+
+
+</html>
