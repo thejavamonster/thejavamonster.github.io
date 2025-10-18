@@ -65,7 +65,7 @@
                         <template id="jekyll-images">[
                             {% assign comma = '' %}
                             {% for f in site.static_files %}
-                                {% if f.path contains '/images/art/' %}
+                                {% if f.path contains '/art/' %}
                                     {% assign ext = f.extname | downcase %}
                                     {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.gif' or ext == '.webp' or ext == '.bmp' or ext == '.svg' %}
                                         {{ comma }}{"src":"{{ f.path | relative_url }}","title":"{{ f.name | split: '.' | first | replace: '-', ' ' | replace: '_', ' ' | capitalize }}"}
@@ -74,8 +74,8 @@
                                 {% endif %}
                             {% endfor %}
                         ]</template>
-            <p class="empty" id="emptyMsg" hidden>No images yet. Drop files into <code>images/art</code> and refresh.</p>
-            <p class="error" id="errorMsg" hidden>Could not load gallery. Make sure you're serving locally and have images in <code>images/art</code>.</p>
+            <p class="empty" id="emptyMsg" hidden>No images yet. Drop files into <code>art</code> and refresh.</p>
+            <p class="error" id="errorMsg" hidden>Could not load gallery. Make sure you're serving locally and have images in <code>art</code>.</p>
         </main>
 
         <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Image viewer">
@@ -87,7 +87,7 @@
 
         <script>
             // Prefer Jekyll-provided list (GH Pages). Fallback locally to directory scrape.
-            const IMAGES_DIR = '/art/';
+            const IMAGES_DIR = 'art/';
             const IMG_EXT = ['.jpg','.jpeg','.png','.gif','.webp','.bmp','.svg'];
 
             function getJekyllItems() {
