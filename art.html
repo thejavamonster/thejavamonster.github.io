@@ -210,13 +210,18 @@
                         return;
                     }
 
-                    // Local fallback: scrape python http.server directory listing
-                    const data = await listImages();
-                    if (!Array.isArray(data) || data.length === 0) {
+                    // Only run local fallback if not on GitHub Pages
+                    const isGithubPages = location.hostname.endsWith('.github.io');
+                    if (!isGithubPages) {
+                        const data = await listImages();
+                        if (!Array.isArray(data) || data.length === 0) {
+                            emptyMsg.hidden = false;
+                            return;
+                        }
+                        renderGallery(data);
+                    } else {
                         emptyMsg.hidden = false;
-                        return;
                     }
-                    renderGallery(data);
                 } catch (err) {
                     console.error('Gallery load failed:', err);
                     errorMsg.hidden = false;
