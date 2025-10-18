@@ -86,7 +86,7 @@
             <img id="lbImage" alt="" />
             <button class="nav next" id="lbNext" aria-label="Next">›</button>
         </div>
-
+s
         <script>
             // Prefer Jekyll-provided list (GH Pages). Fallback locally to directory scrape.
             const IMAGES_DIR = 'art/';
@@ -96,9 +96,8 @@
                 try {
                     const tpl = document.getElementById('jekyll-images');
                     if (!tpl) return [];
-                    // Remove newlines and excessive whitespace between JSON objects
-                    let txt = tpl.textContent.replace(/\s+/g, ' ');
-                    txt = txt.replace(/,\s*{/g, ',{').replace(/\[\s*{/g, '[{').replace(/}\s*]/g, '}]').trim();
+                    // Remove all whitespace/newlines between JSON objects
+                    let txt = tpl.textContent.replace(/\n|\r/g, '').replace(/\s*{\s*/g, '{').replace(/}\s*,\s*/g, '},').replace(/}\s*]/g, '}]').replace(/\[\s*{/g, '[{').trim();
                     if (!txt || !txt.startsWith('[')) return [];
                     const arr = JSON.parse(txt);
                     if (Array.isArray(arr)) return arr;
