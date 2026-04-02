@@ -1,5 +1,15 @@
 const projects = [
   {
+    title: "Smiggles",
+    description:
+      "A lightweight OS (in progress).",
+    url: "/",
+    githubUrl: "https://github.com/TheExpert24/smiggles",
+    images: [
+      "images/smiggles.png"
+    ]
+  },
+  {
     title: "Google Trends Map",
     description:
       "A live-updating map showing top Google searches across the USA.",
@@ -23,7 +33,7 @@ const projects = [
     title: "Live Globe",
     description:
       "A 3D globe with live day/night shading, real-time weather data, and local news.",
-    url: "https://thejavamonster.github.io/globe",
+    url: "https://thejavsamonster.github.io/globe",
     githubUrl: "https://github.com/thejavamonster/globe",
     images: [
       "images/globe.png"
@@ -38,7 +48,28 @@ const projects = [
     images: [
       "images/presidentspeed.png"
     ]
+  },
+    {
+    title: "Bill",
+    description:
+      "Analyzes S&P 500 stocks and gives recommendations.",
+    url: "https://bill-bsaf.onrender.com",
+    githubUrl: "https://github.com/TheExpert24/bill",
+    images: [
+      "images/bill.png"
+    ]
+  },
+  {
+    title: "Pronto Mod Bot",
+    description:
+      "A Python mod bot for the Pronto platform. We won a hackathon with this.",
+    url: "/",
+    githubUrl: "https://github.com/thejavamonster/prontomod",
+    images: [
+      "images/prontomod.png"
+    ]
   }
+  
 ];
 
 const listEl = document.getElementById("projects-list");
