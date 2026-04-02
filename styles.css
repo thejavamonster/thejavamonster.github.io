@@ -1,18 +1,153 @@
+:root {
+  --bg: #d9d9d9;
+  --paper: #f6f6f6;
+  --ink: #101010;
+  --line: #767676;
+  --link: #0033aa;
+  --link-visited: #551a8b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    background-color: #a7e393;
-    color: #333;
+  margin: 0;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px) 0 0 / 100% 3px,
+    var(--bg);
+  color: var(--ink);
+  font-family: "Times New Roman", Times, serif;
+  line-height: 1.35;
 }
-marquee {
-    background-color: #ff0000;
-    color: #fff;
-    font-size:x-large;
-    padding: 5px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
-    
+
+.page {
+  width: min(960px, 96vw);
+  margin: 1rem auto;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  box-shadow: 4px 4px 0 #b0b0b0;
 }
+
+.site-header,
+.site-footer {
+  border-bottom: 2px solid var(--line);
+  padding: 0.75rem 1rem;
+  background: #ececec;
+}
+
+.site-footer {
+  border-bottom: 0;
+  border-top: 2px solid var(--line);
+  font-size: 0.95rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 3.5vw, 2rem);
+}
+
+h2 {
+  font-size: 1.3rem;
+  border-bottom: 1px dotted var(--line);
+  padding-bottom: 0.25rem;
+}
+
+.tagline {
+  margin: 0 0 0.5rem;
+}
+
+nav a,
 a {
-    color: #0000ff;
+  color: var(--link);
+}
+
+a:visited {
+  color: var(--link-visited);
+}
+
+.sep {
+  padding: 0 0.35rem;
+}
+
+.panel {
+  margin: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  background: #fafafa;
+}
+
+.helper-text {
+  margin-top: 0;
+  color: #2f2f2f;
+  font-size: 0.95rem;
+}
+
+.projects-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.project-card {
+  border: 1px solid var(--line);
+  padding: 0.75rem;
+  background: #ffffff;
+  max-width: 420px;
+}
+
+.project-title {
+  margin-bottom: 0.35rem;
+}
+
+.project-description {
+  margin-top: 0;
+}
+
+.project-link-row {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.project-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.6rem;
+}
+
+.project-images img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--line);
+  background: #efefef;
+}
+
+.no-images {
+  margin: 0;
+  font-style: italic;
+  color: #444;
+}
+
+@media (max-width: 600px) {
+  .projects-list {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    max-width: none;
+  }
+
+  .site-header,
+  .site-footer,
+  .panel,
+  .project-card {
+    padding: 0.65rem;
+  }
 }

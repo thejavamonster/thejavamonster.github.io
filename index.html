@@ -1,83 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planet Miller</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="ticker.css">
-    </head>
-    <body>  
-    <header>
-        <h1>Planet Miller</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jules Miller - Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <h1>Jules Miller</h1>
+        <p class="tagline">High school student and programmer.</p>
         <nav>
-            <ul>
-                <li><a href="index.html">home</a></li>
-                <li><a href="webapps.html">web apps</a></li>
-                <li><a href="videos.html">videos</a></li>
-                <li><a href="art.html">art</a></li>
-                <li><a href="contact.html">contact</a></li>
-            </ul>
+          <a href="#about">About</a>
+          <span class="sep">|</span>
+          <a href="#projects">Projects</a>
+          <span class="sep">|</span>
+          <a href="mailto:ninjamasterlikesquorn@gmail.com">Contact</a>
         </nav>
-    </header>
-    <div class="ticker-wrap">
-        <div id="news-ticker" class="ticker">Loading headlines…</div>
+      </header>
+
+      <main>
+        <section id="about" class="panel">
+          <h2>About Me</h2>
+          <p>
+            I'm a high school student from Florida. I like programming, soccer, piano, and 
+            card games. I started learning programming with a Javascript book when I was 11, and 
+            I've kept learning and building projects ever since. I mostly build web apps with Python and Node, but 
+            lately I've been working on OS development with @TheExpert24. 
+
+          </p>
+          <p>
+            Gerald Ford is in my opinion the greatest leader America has ever seen, and I aspire to attain a 
+            fraction of his greatness in my lifetime. Richard Nixon is a close second. 
+          </p>
+        </section>
+
+        <section id="projects" class="panel">
+          <h2>Projects</h2>
+
+
+          <div id="projects-list" class="projects-list" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Last updated: April 2026</p>
+      </footer>
     </div>
-    <p>thank you for visiting Planet Miller</p>
-            <table>
-            <tr>
-                <th>Name</th>
-                <td>Jules Miller</td>
-            </tr>
-            <tr>
-                <th>Species</th>
-                <td>homo sapiens</td>
-            </tr>
-            <tr>
-                <th>Age</th>
-                <td id="age-cell">calculating…</td>
-            </tr>
-            <tr>
-                <th>Occupation</th>
-                <td>student</td>
-            </tr>
-            <tr>
-                <th>Hobbies</th>
-                <td>coding, videomaking, soccer, piano, art, geography</td>
-            </tr>
-            <tr>
-                <th>Location</th>
-                <td>north florida</td>
-            </tr>
-        </table>
-    <script>
-        (function () {
-            const ageCell = document.getElementById('age-cell');
-            if (!ageCell) return;
 
-            const birth = new Date(2009, 2, 28, 3, 0, 0);
-            const now = new Date();
+    <template id="project-template">
+      <article class="project-card">
+        <h3 class="project-title"></h3>
+        <p class="project-description"></p>
+        <p class="project-link-row">
+          <a class="project-link" target="_blank" rel="noopener noreferrer">Visit project</a>
+          <span class="sep github-sep">|</span>
+          <a class="project-github-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </p>
+        <div class="project-images"></div>
+      </article>
+    </template>
 
-            const msPerYear = 365.2425 * 24 * 60 * 60 * 1000;
-            const years = (now - birth) / msPerYear;
-
-            const SVEDBERGS_PER_YEAR = 3.1556952e21; // as provided
-            const svedbergs = years * SVEDBERGS_PER_YEAR;
-
-            const absVal = Math.abs(svedbergs);
-            const exponent = absVal === 0 ? 0 : Math.floor(Math.log10(absVal));
-            const mantissa = absVal === 0 ? 0 : svedbergs / Math.pow(10, exponent);
-
-            let mantissaStr = mantissa.toFixed(8);
-            mantissaStr = mantissaStr.replace(/\.?(0+)$/, (m) => m.length > 1 ? '' : m);
-
-            ageCell.textContent = `${mantissaStr} × 10^${exponent} svedbergs`;
-        })();
-    </script>
-    <script src="ticker.js"></script>
-
-    <img src="illuminati-memes.gif" alt="Aae" style="position: fixed; bottom: 0px; right: 0px;">
-    </body>
-
-
+    <script src="projects.js"></script>
+  </body>
 </html>
