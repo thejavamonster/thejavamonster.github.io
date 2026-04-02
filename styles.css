@@ -36,6 +36,26 @@ body {
   background: #ececec;
 }
 
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-copy {
+  min-width: 0;
+}
+
+.header-image {
+  width: 80px;
+  height: 110px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  background: #efefef;
+  object-position: top center;
+}
+
 .site-footer {
   border-bottom: 0;
   border-top: 2px solid var(--line);
@@ -150,6 +170,16 @@ a:visited {
 }
 
 @media (max-width: 600px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-image {
+    width: 88px;
+    height: 88px;
+  }
+
   .projects-list {
     grid-template-columns: 1fr;
   }
