@@ -3,7 +3,7 @@ const projects = [
     title: "Smiggles",
     description:
       "A lightweight OS (in progress).",
-    url: "/",
+    url: "#",
     githubUrl: "https://github.com/TheExpert24/smiggles",
     images: [
       "images/smiggles.png"
@@ -63,7 +63,7 @@ const projects = [
     title: "Pronto Mod Bot",
     description:
       "A Python mod bot for the Pronto platform. We won a hackathon with this.",
-    url: "/",
+    url: "#",
     githubUrl: "https://github.com/thejavamonster/prontomod",
     images: [
       "images/prontomod.png"
