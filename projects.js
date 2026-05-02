@@ -3,7 +3,7 @@ const projects = [
     title: "Smiggles",
     description:
       "A lightweight OS (in progress).",
-    url: "#",
+    url: "https://thejavamonster.github.io/smigglesweb",
     githubUrl: "https://github.com/TheExpert24/smiggles",
     images: [
       "images/smiggles.png"
