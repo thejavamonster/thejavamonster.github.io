@@ -1,5 +1,16 @@
 const projects = [
   {
+    title: "Country Guesser",
+    description: "A geography quiz game with countries, flags, and capital cities.",
+    url: "https://thejavamonster.github.io/globegame",
+    githubUrl: "https://github.com/thejavamonster/globegame",
+    images: [
+      "images/globegame.png"
+    ]
+
+  },
+
+  {
     title: "Smiggles",
     description:
       "A lightweight OS (in progress).",
