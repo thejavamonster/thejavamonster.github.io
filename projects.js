@@ -1,5 +1,23 @@
 const projects = [
   {
+    title: "Brain Viewer",
+    description: "A interactive 3D brain model with brain regions and Walter White.",
+    url: "https://thejavamonster.github.io/brainviewer",
+    githubUrl: "https:/github.com/thejavamonster/brainviewer",
+    images: [
+      "images/brainviewer.png"
+    ]
+  },
+  {
+    title: "Next Gen Opportunities",
+    description: "A web app that helps students find free online classes and programs.",
+    url: "https://nextgenopportunities.me/opportunities.html",
+    githubUrl: "https://github.com/TheExpert24/congressionalappchallengeentry",
+    images: [
+      "images/ngo.png"
+    ]
+  },
+  {
     title: "Country Guesser",
     description: "A geography quiz game with countries, flags, and capital cities.",
     url: "https://thejavamonster.github.io/globegame",
