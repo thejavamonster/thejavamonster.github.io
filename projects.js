@@ -62,7 +62,7 @@ const projects = [
     title: "Live Globe",
     description:
       "A 3D globe with live day/night shading, real-time weather data, and local news.",
-    url: "https://thejavsamonster.github.io/globe",
+    url: "https://thejavamonster.github.io/globe",
     githubUrl: "https://github.com/thejavamonster/globe",
     images: [
       "images/globe.png"
