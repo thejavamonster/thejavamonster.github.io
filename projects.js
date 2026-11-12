@@ -97,8 +97,16 @@ const projects = [
     images: [
       "images/prontomod.png"
     ]
+  },
+  {
+    title: "Astronomical Models",
+    description: "Interactive 3D simulations showing the astronomical models of some ancient philosophers.",
+    url: "https://thejavamonster.github.io/hscfinal",
+    githubUrl: "https://github.com/thejavamonster/hscfinal",
+    images: [
+      "images/hscfinal.png"
+    ]
   }
-  
 ];
 
 const listEl = document.getElementById("projects-list");
